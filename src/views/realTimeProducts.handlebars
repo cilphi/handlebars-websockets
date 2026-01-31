@@ -1,0 +1,83 @@
+<main>
+    <!--Manipular la lista de productos-->
+    <section>
+        <h1>Manipular la lista de Productos</h1>
+        <p>Si quieres comenzar desde cero la lista de productos puedes:</p>
+        <div class="manipularLista">
+            <div>
+                <h3>Borrar todos los productos</h3>
+                <p>Esto eliminará todos los productos de la base de datos.</p>
+                <button class="btnDanger" onclick="deleteAllProducts()">Borrar Todos los Productos</button>
+            </div>
+            <div>
+                <h3>Restaurar los productos originales</h3>
+                <p>Esto creará una nueva lista de productos, solo sí has eliminado la base de datos.</p>
+                <button class="btnSuccess" onclick="#writeProducts()">Restaurar Lista de Productos</button>
+            </div>
+        </div>
+    </section>
+    <!--Lista de Productos en tiempo Real-->
+    <section>
+            <h1>Productos Actualizados:</h1>
+            {{#each products}}
+                <article class="productCard" id="{{this.id}}" >
+                    <h4>{{this.title}}</h4>
+                    <p>{{this.description}}</p>
+                    <div class="productDetails">
+                        <ul>
+                            <li>Precio: ${{this.price}}</li>
+                            <li>Categoría: {{this.category}}</li>
+                            <li>Stock: {{this.stock}}</li>
+                        </ul>
+                        <button class="btnDanger" onclick="deleteProduct('{{this.id}}')">Eliminar Producto</button>
+                    </div>
+                </article>
+            {{/each}}
+    </section>
+    <!--Agregar producto-->
+    <section>
+            <h1>Agregar producto</h1>
+            <form id="productForm" action="/api/products" method="POST">
+                <label for="title">Nombre del producto:</label>
+                <input type="text" id="title" name="title" value="Azul" required/>
+                <label for="description">Descripción:</label>
+                <textarea id="description" name="description" required>Juego de estrategia y diseño de patrones con azulejos coloridos.</textarea>
+                <label for="category">Categoría:</label>
+                <input type="text" id="category" name="category" value="Juegos de mesa" required/>
+                <label for="price">Precio del producto:</label>
+                <input type="number" id="price" name="price" value="42.5" required/>
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" value="10" required/>
+                <label for="status">Estado:</label>
+                <input type="text" id="status" name="status" value="true" required/>
+                <label for="code">SKU:</label>
+                <input type="text" id="code" name="code" value="SKU-AZUL" required/>
+                <label for="img1">Imagen 1:</label>
+                <input type="text" id="img1" name="img1" value="https://example.com/azul/img1.jpg" required/>
+                <label for="img2">Imagen 2:</label>
+                <input type="text" id="img2" name="img2" value="https://example.com/azul/img2.jpg" required/>
+                <label for="img3">Imagen 3:</label>
+                <input type="text" id="img3" name="img3" value="https://example.com/azul/img3.jpg" required/>
+                <label for="img4">Imagen 4:</label>
+                <input type="text" id="img4" name="img4" value="https://example.com/azul/img4.jpg" required/>
+                <button class="btnSuccess" onclick="addProduct()">Crear Producto</button>
+            </form>
+    </section>
+    <!--Actualizar un producto-->
+    <section>
+            <h1>Actualizar producto</h1>
+            <form id="productForm" action="/api/products" method="PUT">
+                <label for="idProducto">ID del producto a actualizar:</label>
+                <input type="text" id="idProducto" name="idProducto" value="f7e1b9c3-2a8d-4c4f-9e71-6d0a1b3c8f33" required/>
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" value="10" required/>
+                <label for="status">Estado:</label>
+                <input type="text" id="status" name="status" value="true" required/>
+                <button class="btnSuccess" onclick="updateProduct()">Actualizar Producto</button>
+            </form>
+    </section>
+</main>
+<script src="/socket.io/socket.io.js"></script>
+<script src="../../public/socketConfig.js"></script>
+<script src="../../public/script.js"></script>
+<script src="../managers/productManager.js"></script>
