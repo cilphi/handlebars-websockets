@@ -26,7 +26,7 @@ app.set('views', basePath + '/src/views');
 app.set('view engine', 'handlebars');
 
 /*Rutas */
-app.use('/api/products', viewsRouter);
+app.use('/', viewsRouter);
 app.use('/realtimeproducts', productsRouter);
 
 /* Sockets */
