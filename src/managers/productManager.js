@@ -196,25 +196,6 @@ export class ProductManager {
         }
     }
     
-    //Eliminar un producto
-    async deleteProduct (id) {
-        try {
-            const products = await this.getProducts();
-            const exists = products.some(item => item.id === id);
-            if (!exists) {
-                console.log('Error: No existe un producto con el ID:', id);
-                return null;
-            };
-            const deletedProducts = products.filter(item => item.id !== id);
-            await this.#writeProducts(deletedProducts);
-            console.log('Producto eliminado con éxito.');
-            return true;
-        } catch (error) {
-            console.error('Error al eliminar el producto:', error);
-            throw error;
-        }
-    }
-
     // Eliminar el archivo de productos
     async deleteAllProducts() {
         try {
@@ -234,6 +215,25 @@ export class ProductManager {
             } else {
                 throw error;
             }
+        }
+    }
+    
+    //Eliminar un producto
+    async deleteProduct (id) {
+        try {
+            const products = await this.getProducts();
+            const exists = products.some(item => item.id === id);
+            if (!exists) {
+                console.log('Error: No existe un producto con el ID:', id);
+                return null;
+            };
+            const deletedProducts = products.filter(item => item.id !== id);
+            await this.#writeProducts(deletedProducts);
+            console.log('Producto eliminado con éxito.');
+            return true;
+        } catch (error) {
+            console.error('Error al eliminar el producto:', error);
+            throw error;
         }
     }
 }
