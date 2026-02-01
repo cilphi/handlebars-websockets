@@ -135,7 +135,7 @@ main {
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
-#productForm {
+#createProductForm, #updateProductForm {
     display: flex;
     flex-direction: column;
     gap: 8px;
@@ -143,12 +143,13 @@ main {
     border-radius: 16px;
     padding: 24px;
 }
-#productForm input, #productForm textarea {
+input, textarea {
     padding: 4px;
     border-radius: 8px;
     border: 1px solid #4D4C5B;
+    color: #4537AD;
 }
-#productForm input::-ms-value, ::-webkit-input-value, ::-moz-placeholder {
+select{
     color: #4537AD;
 }
 .crearDestruir {

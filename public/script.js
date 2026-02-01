@@ -1,13 +1,19 @@
-// Socket connection
 const socket = io();
 
-
-
-// Helper function to render product list dynamically
+// Función para renderizar Lista de Productos
 function renderProducts(products) {
-    const container = document.querySelector('section:nth-of-type(2)'); // Products list section
-    const productsHtml = products.map(product => `
-        <article class="productCard" id="${product.id}">
+    const container = document.querySelector('#productsSection .vistaProductos');
+    if (!container) return;
+    if (products.length === 0) {
+        container.innerHTML = 
+        `<div class="productDetails">
+            <h4>Los productos han sido borrados</h4>
+            <p>Si quieres ver los juegos disponibles, haz click en Restaurar Lista de productos</p>
+        </div>`;
+        return;
+    }
+    container.innerHTML = products.map(product => 
+        `<article class="productCard" id="${product.id}">
             <h4>${product.title}</h4>
             <p>${product.description}</p>
             <div class="productDetails">
@@ -16,59 +22,86 @@ function renderProducts(products) {
                     <li>Categoría: ${product.category}</li>
                     <li>Stock: ${product.stock}</li>
                 </ul>
-                <button class="btnDanger" onclick="deleteProduct('${product.id}')">Eliminar Producto</button>
+                <button type="button"
+                        class="btnDanger"
+                        onclick="deleteProduct('${product.id}')">
+                    Eliminar Producto
+                </button>
             </div>
         </article>
     `).join('');
-    container.innerHTML = '<h1>Productos Actualizados:</h1>' + productsHtml;
 }
 
-const productForm = document.getElementById('productForm');
-
-productForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const title = productForm.title.value;
-    const description = productForm.description.value;
-    const category = productForm.category.value;
-    const price = productForm.price.value;
-    const stock = productForm.stock.value;
-    const status = productForm.status.value;
-    const code = productForm.code.value;
-    // Array de imágenes falsas
-    const images = [ 
-        productForm.img1.value,
-        productForm.img2.value,
-        productForm.img3.value,
-        productForm.img4.value
-    ];
-
-    const formData = {
-        title,
-        description,
-        category,
-        price: parseFloat(price),
-        stock: parseInt(stock),
-        status: status === 'true',
-        code
+// Agregar producto
+async function addProduct() {
+    const form = document.getElementById("createProductForm");
+    const product = {
+        title: form.title.value,
+        description: form.description.value,
+        category: form.category.value,
+        price: Number(form.price.value),
+        stock: Number(form.stock.value),
+        status: form.status.value === "true",
+        code: form.code.value,
+        thumbnails: [
+            form.img1.value,
+            form.img2.value,
+            form.img3.value,
+            form.img4.value
+        ]
     };
     try {
-        fetch('/api/products', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(formData)
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(`Producto agregado: ${data.product.title}`);
-    });
-
-    productForm.reset();
+        const resp = await fetch("/realtimeproducts", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(product)
+        });
+        const data = await resp.json();
+        if (!data.ok) alert('No se pudo agregar el producto');
+        alert("Producto agregado correctamente");
     } catch (error) {
-        console.error('Error al agregar el producto:', error);
+        console.error("Error al agregar producto:", error);
     }
-});
+};
 
-// Functions called from the realTimeProducts view buttons
+// Actualizar producto
+async function updateProduct() {
+    const form = document.getElementById('updateProductForm');
+    const id = form.idProducto.value;
+    const updatedFields = {
+        stock: Number(form.stock.value),
+        status: form.status.value === 'true'
+    };
+    try {
+        const resp = await fetch(`/realtimeproducts/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedFields)
+        });
+        const data = await resp.json();
+        if (!data.msg) alert('No se pudo actualizar el producto');
+    } catch (error) {
+        console.error('Error al actualizar producto:', error);
+    }
+}
+
+//Borrar producto por id
+async function deleteProduct(id) {
+    try {
+        const resp = await fetch(`/realtimeproducts/${id}`, {
+            method: 'DELETE'
+        });
+        const data = await resp.json();
+        if (!data.ok) {
+            alert('No se pudo eliminar el producto');
+        }
+    } catch (error) {
+        console.error('Error al eliminar producto:', error);
+    }
+}
+
+
+// Funciones llamadas desde los botones
 window.deleteAllProducts = async () => {
     try {
         const resp = await fetch('/realtimeproducts/all', { method: 'DELETE' });
@@ -98,22 +131,9 @@ socket.on('connect', () => {
     console.log('Conectado al servidor de sockets con ID:', socket.id);
 });
 
-socket.on('productsReset', (products) => {
-    renderProducts(products);
-});
-
-socket.on('productsDeletedAll', () => {
-    renderProducts([]);
-});
-
-socket.on('newProduct', (product) => {
-    location.reload();
-});
-
-socket.on('updateProduct', (data) => {
-    location.reload();
-});
-
-socket.on('deleteProduct', (data) => {
-    location.reload();
+['productsUpdated', 'productsDeletedAll', 'productsReset'].forEach(event => {
+    // Productos vacíos por defecto si no se detectan
+    socket.on(event, (products = []) => {  
+        renderProducts(products);
+    });
 });
