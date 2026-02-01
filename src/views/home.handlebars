@@ -2,6 +2,8 @@
     <!--Lista de Productos-->
     <section>
             <h1>Productos:</h1>
+            <div class="vistaProductos">
+            {{#each products}}
                 <article class="productCard" >
                     <h4>{{this.title}}</h4>
                     <p>{{this.description}}</p>
@@ -13,5 +15,7 @@
                         </ul>
                     </div>
                 </article>
+            {{/each}}
+            </div>
     </section>
 </main>

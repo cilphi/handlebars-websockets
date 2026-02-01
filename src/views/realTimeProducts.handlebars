@@ -1,6 +1,6 @@
 <main>
     <!--Manipular la lista de productos-->
-    <section>
+    <section class="crearDestruir">
         <h1>Manipular la lista de Productos</h1>
         <p>Si quieres comenzar desde cero la lista de productos puedes:</p>
         <div class="manipularLista">
@@ -12,15 +12,16 @@
             <div>
                 <h3>Restaurar los productos originales</h3>
                 <p>Esto creará una nueva lista de productos, solo sí has eliminado la base de datos.</p>
-                <button class="btnSuccess" onclick="#writeProducts()">Restaurar Lista de Productos</button>
+                <button class="btnSuccess" onclick="createProductsFile()">Restaurar Lista de Productos</button>
             </div>
         </div>
     </section>
     <!--Lista de Productos en tiempo Real-->
     <section>
             <h1>Productos Actualizados:</h1>
+            <div class="vistaProductos">
             {{#each products}}
-                <article class="productCard" id="{{this.id}}" >
+                <article class="productCard" >
                     <h4>{{this.title}}</h4>
                     <p>{{this.description}}</p>
                     <div class="productDetails">
@@ -33,9 +34,11 @@
                     </div>
                 </article>
             {{/each}}
+            </div>
     </section>
-    <!--Agregar producto-->
-    <section>
+    <!--Agregar y Actualizar producto-->
+    <section class="formFilled">
+        <div>
             <h1>Agregar producto</h1>
             <form id="productForm" action="/api/products" method="POST">
                 <label for="title">Nombre del producto:</label>
@@ -62,9 +65,8 @@
                 <input type="text" id="img4" name="img4" value="https://example.com/azul/img4.jpg" required/>
                 <button class="btnSuccess" onclick="addProduct()">Crear Producto</button>
             </form>
-    </section>
-    <!--Actualizar un producto-->
-    <section>
+        </div>
+        <div>
             <h1>Actualizar producto</h1>
             <form id="productForm" action="/api/products" method="PUT">
                 <label for="idProducto">ID del producto a actualizar:</label>
@@ -75,9 +77,9 @@
                 <input type="text" id="status" name="status" value="true" required/>
                 <button class="btnSuccess" onclick="updateProduct()">Actualizar Producto</button>
             </form>
+        </div>
     </section>
 </main>
 <script src="/socket.io/socket.io.js"></script>
-<script src="../../public/socketConfig.js"></script>
-<script src="../../public/script.js"></script>
-<script src="../managers/productManager.js"></script>
+<script src="./productManager.js"></script>
+<script src="./script.js"></script>
