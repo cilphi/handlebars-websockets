@@ -15,21 +15,20 @@ Se visualiza desde el puerto 8080, si quieres cambiar la salida, debes ir al arc
 - Lenguaje: JavaScript, Handlebars, CSS
 
 ## Iniciar el servidor
-
 ### Abrir una nueva terminal
-
 Escribe el comando de inicio:
 - Consola: 
 ```bash
 node app.js
 ```
-### Ingresar al Home
+### Ver desde el browser
 
 Escribe la siguiente URL:
-- Barra de direcciones: 
+- Desde un ámbito local: 
 ```bash
-http://localhost:8080/api/products
+http://localhost:8080/
 ```
+- Desde Github codespaces debes seguir el link de la URL local que se indica en la pestaña PORT
 ## Crear la lista
 
 ### Write File
@@ -52,6 +51,10 @@ Lista de Productos
 ```
 http://localhost:8080/api/products
 ```
+- Desde Github codespaces escribir después de la URL https://CODESPACENAME-PORT.app.github.dev
+```bash
+/api/products
+```
 ### Get Real Time Products
 
 Para ver la lista de productos manipulada en tiempo real con Socket.io:
@@ -63,7 +66,10 @@ Websocket
 ```
 http://localhost:8080/realtimeproducts
 ```
-
+- Desde Github codespaces escribir después de la URL https://CODESPACENAME-PORT.app.github.dev
+```bash
+/realtimeproducts
+```
 ## Método POST
 
 ### Crear Producto
@@ -88,4 +94,5 @@ Para eliminar un producto:
 ```bash
 Botón Eliminar Producto
 ```
+
 
