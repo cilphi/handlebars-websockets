@@ -1,5 +1,4 @@
 import express from 'express';
-import {createServer} from 'http';
 import {Server} from 'socket.io';
 import handlebars from 'express-handlebars';
 import {basePath} from './src/utils/utils.js';
@@ -7,9 +6,9 @@ import viewsRouter from './src/routes/views.router.js';
 import productsRouter from './src/routes/products.router.js';
 
 const app = express();
-const httpServer = createServer(app);
-export const io = new Server(httpServer);
 const PORT = 8080;
+const httpServer = app.listen(PORT, () => console.log(`Servidor de Express escuchando en el puerto ${PORT}`));
+export const io = new Server(httpServer);
 
 /* Middleware para parsear JSON */
 app.use(express.json());
@@ -33,9 +32,4 @@ app.use('/realtimeproducts', productsRouter);
 /* Sockets */
 io.on('connection', socket => {
     console.log('Cliente conectado:', socket.id);
-});
-
-//Servidor escuchando
-app.listen(PORT, () => {
-    console.log(`Servidor Express en puerto ${PORT}`);
 });
