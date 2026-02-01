@@ -11,8 +11,8 @@ Se visualiza desde el puerto 8080, si quieres cambiar la salida, debes ir al arc
 
 - Framework: Express
 - Plataforma: Node.js
-- Dependencias: Handlebars & Socket.io
-- Lenguaje: JavaScript, HTML, CSS
+- API: Socket.io
+- Lenguaje: JavaScript, Handlebars, CSS
 
 ## Iniciar el servidor
 
@@ -88,3 +88,4 @@ Para eliminar un producto:
 ```bash
 Botón Eliminar Producto
 ```
+
