@@ -6,7 +6,10 @@ import {basePath} from '../utils/utils.js';
 const router = Router();
 
 /* Uso Handlebars */
-router.get('/', (__, res) => {
+router.get("/",(req,res)=>{
+    res.render("index", {title: 'Bienvenida a Ludussus'})
+})
+router.get('/api/products/', (__, res) => {
     const file = path.resolve(basePath + '/src/json/products.json');
     const products = JSON.parse(fs.readFileSync(file, 'utf-8'));
     res.render('home', {title: 'Lista de productos', products: products});
