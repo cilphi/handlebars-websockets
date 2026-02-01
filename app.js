@@ -2,7 +2,7 @@ import express from 'express';
 import {createServer} from 'http';
 import {Server} from 'socket.io';
 import handlebars from 'express-handlebars';
-import __dirname from './src/utils/utils.js';
+import {basePath} from './src/utils/utils.js';
 import viewsRouter from './src/routes/views.router.js';
 import productsRouter from './src/routes/products.router.js';
 
@@ -18,10 +18,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 /* Handlebars*/
+app.use(express.static(basePath + '/public'))
+app.use(express.static(basePath + '/src/managers'))
 app.engine('handlebars', handlebars.engine({
-    partialsDir: (__dirname + '/src/views/partials')
+    partialsDir: (basePath + '/src/views/partials')
 }));
-app.set('views', __dirname + '/src/views');
+app.set('views', basePath + '/src/views');
 app.set('view engine', 'handlebars');
 
 /*Rutas */
@@ -29,9 +31,8 @@ app.use('/api/products', viewsRouter);
 app.use('/realtimeproducts', productsRouter);
 
 /* Sockets */
-io.on('connection', (socket) => {
-    //socket.on('message', (data) => {}
-    console.log('Nuevo cliente conectado');
+io.on('connection', socket => {
+    console.log('Cliente conectado:', socket.id);
 });
 
 //Servidor escuchando
